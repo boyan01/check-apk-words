@@ -9,7 +9,6 @@ import com.android.build.gradle.internal.tasks.NonIncrementalTask
 import com.android.build.gradle.internal.tasks.factory.VariantTaskCreationAction
 import com.android.builder.core.VariantType
 import com.android.builder.dexing.ClassFileInput
-import tech.soit.words.plugin.SensitiveWordsExtension
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.gradle.api.Project
@@ -20,9 +19,11 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.kotlin.dsl.findByType
 import tech.soit.words.lib.scanner.*
+import tech.soit.words.lib.utils.buildPackageNameMapping
 import tech.soit.words.lib.utils.deCompileApk
 import tech.soit.words.lib.utils.mapResult
 import tech.soit.words.lib.utils.withIndent
+import tech.soit.words.plugin.SensitiveWordsExtension
 import java.io.File
 import java.util.zip.ZipFile
 import kotlin.streams.toList
@@ -75,7 +76,7 @@ abstract class SensitiveWordsScanTask : NonIncrementalTask() {
         val results = SensitiveWordsDetector.detector(output, ScanOptions(options.words, options.ignoreCase))
 
         // 读取 mapping 文件
-        val reMapping = if (mappingPath != null) packageNameMapping(mappingPath) else emptyMap()
+        val reMapping = buildPackageNameMapping(mappingPath)
 
         println(" 正在分析依赖 ")
         val artifactMap = extractArtifactClassesMap(classesArtifacts)
@@ -128,20 +129,6 @@ abstract class SensitiveWordsScanTask : NonIncrementalTask() {
         })
     }
 
-    private fun packageNameMapping(mappingPath: String): Map<String, String> {
-        val lines = File(mappingPath).useLines { sequence ->
-            sequence
-                .filter { line -> !line.startsWith("#") && !line.startsWith(" ") }
-                .toList()
-        }
-        return lines.map {
-            it.removeSuffix(":")
-        }.map {
-            it.split(" -> ")
-        }.map {
-            it.last() to it.first()
-        }.toMap()
-    }
 
     private fun extractArtifactClassesMap(classesArtifacts: ArtifactCollection): Map<String, String> {
         val map = mutableMapOf<String, String>()
@@ -196,7 +183,6 @@ abstract class SensitiveWordsScanTask : NonIncrementalTask() {
             task.enabled = enable
 
             task.dependsOn(variantScope.taskContainer.assembleTask)
-            task.group = "xyz"
             task.description = (if (enable) "" else "[已禁用]") +
                     "扫描 ${variantScope.variantData.name} 是否包含词语:" +
                     task.project.sensitiveWordsConfig().words.joinToString()
@@ -215,7 +201,7 @@ abstract class SensitiveWordsScanTask : NonIncrementalTask() {
                 .getFinalProduct(InternalArtifactType.APK)
             // 某些应用会改写 variant output file
             task.apkFiles = variant.outputs.map { it.outputFile }
-            task.outputDirectory = File(task.project.buildDir, "xyz/sensitive-words")
+            task.outputDirectory = File(task.project.buildDir, "output/sensitive-words")
         }
 
     }

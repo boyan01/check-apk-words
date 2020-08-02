@@ -35,6 +35,7 @@
             <option value="$PROJECT_DIR$/thirdparty/Apktool/brut.j.common" />
             <option value="$PROJECT_DIR$/thirdparty/Apktool/brut.j.dir" />
             <option value="$PROJECT_DIR$/thirdparty/Apktool/brut.j.util" />
+            <option value="$PROJECT_DIR$/words-app" />
             <option value="$PROJECT_DIR$/words-gradle-plugin" />
             <option value="$PROJECT_DIR$/words-lib" />
           </set>

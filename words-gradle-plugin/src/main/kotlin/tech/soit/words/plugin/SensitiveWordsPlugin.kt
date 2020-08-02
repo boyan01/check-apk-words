@@ -7,10 +7,11 @@ import tech.soit.words.plugin.tasks.SensitiveWordsScanTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+@Suppress("unused")
 open class SensitiveWordsPlugin : Plugin<Project> {
 
     companion object {
-        private const val CONFIG_SENSITIVE_WORDS = "xyzSensitiveWords"
+        private const val CONFIG_SENSITIVE_WORDS = "sensitiveWords"
     }
 
     override fun apply(project: Project) {

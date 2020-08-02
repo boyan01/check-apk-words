@@ -10,10 +10,6 @@ buildscript {
     }
 }
 
-plugins {
-    kotlin("jvm") version "1.3.72" apply false
-}
-
 subprojects {
     tasks.withType<KotlinCompile>().all {
         kotlinOptions.jvmTarget = "1.8"
@@ -29,7 +25,7 @@ subprojects {
         google()
         maven("https://plugins.gradle.org/m2/")
     }
-    group = "com.xyz.library"
+    group = "tech.soit.words"
     version = "1.0.0"
 }
 

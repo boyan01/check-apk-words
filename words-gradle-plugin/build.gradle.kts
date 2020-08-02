@@ -16,8 +16,8 @@ gradlePlugin {
     isAutomatedPublishing = false
     plugins {
         create("check-apk-words") {
-            id = "com.xyz.android.plugin.xyz-sensitive-words"
-            implementationClass = "com.xyz.android.plugin.sensitive.XyzSensitiveWordsPlugin"
+            id = "techs.soit.plugin.sensitive-words"
+            implementationClass = "tech.soit.words.plugin.SensitiveWordsPlugin"
         }
     }
 }
