@@ -4,7 +4,7 @@
 
 反编译APK，检索 APK 内的关键字，打印关键字所在的文件/类。
 
-## words-ap
+## words-app
 
 对于混淆后的 apk ，提供 mapping.txt ,则支持输出源文件的类名。
 
